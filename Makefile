@@ -1,3 +1,17 @@
+LESS_FILES := ./less/accordion.less               ./less/forms.less                  ./less/popovers.less                ./less/tables.less \
+ ./less/alerts.less                  ./less/grid.less                    ./less/progress-bars.less           ./less/tests \
+ ./less/bootstrap.less               ./less/hero-unit.less               ./less/reset.less                   ./less/thumbnails.less \
+ ./less/breadcrumbs.less             ./less/labels-badges.less           ./less/responsive-1200px-min.less   ./less/tooltip.less \
+ ./less/button-groups.less           ./less/layouts.less                 ./less/responsive-767px-max.less    ./less/type.less \
+ ./less/buttons.less                 ./less/mixins.less                  ./less/responsive-768px-979px.less  ./less/utilities.less \
+ ./less/carousel.less                ./less/modals.less                  ./less/responsive-navbar.less       ./less/variables.less \
+ ./less/close.less                   ./less/navbar.less                  ./less/responsive-utilities.less    ./less/wells.less \
+ ./less/code.less                    ./less/navs.less                    ./less/responsive.less \
+ ./less/component-animations.less    ./less/pager.less                   ./less/scaffolding.less \
+ ./less/dropdowns.less               ./less/pagination.less              ./less/sprites.less
+
+
+
 BOOTSTRAP = ./docs/assets/css/bootstrap.css
 BOOTSTRAP_LESS = ./less/bootstrap.less
 BOOTSTRAP_RESPONSIVE = ./docs/assets/css/bootstrap-responsive.css
@@ -55,7 +69,7 @@ test:
 # recess & uglifyjs are required
 #
 
-bootstrap:
+bootstrap bootstrap/css/bootstrap.css: $(LESS_FILES)
 	mkdir -p bootstrap/img
 	mkdir -p bootstrap/css
 	mkdir -p bootstrap/js
@@ -69,6 +83,10 @@ bootstrap:
 	echo "/*!\n* Bootstrap.js by @fat & @mdo\n* Copyright 2012 Twitter, Inc.\n* http://www.apache.org/licenses/LICENSE-2.0.txt\n*/" > bootstrap/js/copyright.js
 	cat bootstrap/js/copyright.js bootstrap/js/bootstrap.min.tmp.js > bootstrap/js/bootstrap.min.js
 	rm bootstrap/js/copyright.js bootstrap/js/bootstrap.min.tmp.js
+
+copy-priceupdown:
+	@echo "Copying bootstrap into Priceupdown static folder"
+	cp -rf bootstrap/* ../../static
 
 #
 # MAKE FOR GH-PAGES 4 FAT & MDO ONLY (O_O  )
@@ -88,7 +106,7 @@ gh-pages: bootstrap docs
 
 watch:
 	echo "Watching less files..."; \
-	watchr -e "watch('less/.*\.less') { system 'make' }"
+	watchr -e "watch('less/.*\.less') { system 'make -B bootstrap copy-priceupdown' }"
 
 
 .PHONY: docs watch gh-pages
